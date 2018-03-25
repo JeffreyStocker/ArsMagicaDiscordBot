@@ -1,0 +1,24 @@
+{
+  "name": "bot1",
+  "version": "1.0.0",
+  "description": "beginning Discord Bot",
+  "main": "app.js",
+  "dependencies": {
+    "discord": "^0.8.2",
+    "discord.js": "^11.3.2",
+    "dotenv": "^5.0.1",
+    "nedb": "^1.8.0",
+    "npm": "^5.8.0",
+    "pouchdb": "^6.4.3",
+    "sqlite3": "^4.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha test"
+  },
+  "keywords": [
+    "discord"
+  ],
+  "author": "Jeffrey Stocker",
+  "license": "ISC"
+}
