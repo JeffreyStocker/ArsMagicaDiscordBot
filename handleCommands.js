@@ -31,8 +31,14 @@ module.exports = {
 
 
   simple (message, content) {
-
-    message.channel.send(simple());
+    var output = '';
+    var count = Number(content[1]) + 1;
+    if (content[1] && content[1] > 1) {
+      for (var i = 1; i < count; i++) {
+        output += i + '. ' + simple() + '\n';
+      }
+    }
+    rolledMessage(message, output);
   },
 
   stress(message, content) {
@@ -44,8 +50,9 @@ module.exports = {
       }
       let outGoingMessage = '';
 
-      for (let roll of rolls) {
-        outGoingMessage += stressMessage(roll) + '\n';
+      for (let [count, roll] of Object.entries(rolls)) {
+        count++;
+        outGoingMessage += count + '. ' + stressMessage(roll) + '\n';
       }
       console.log (outGoingMessage)
       rolledMessage(message, outGoingMessage);
