@@ -1,17 +1,21 @@
 module.exports = {
-  giveNotificationBack(message, messageToReturn) {
-    message.channel.send(message.author + '\n' + messageToReturn);
+  giveNotificationBack(messageObject, messageToReturn) {
+    messageObject.channel.send(message.author + '\n' + messageToReturn);
   },
 
-  rolledMessage(message, messageToReturn) {
-    message.channel.send(message.author + ' rolled: \n' + messageToReturn);
+  rolledMessage(messageObject, messageToReturn) {
+    messageObject.channel.send(message.author + ' rolled: \n' + messageToReturn);
   },
 
-  reply (message, messageToReturn) {
-    message.reply(messageToReturn)
+  reply (messageObject, messageToReturn) {
+    messageObject.reply(messageToReturn)
   },
 
-  getNickname (message) {
-    return message.channel.members.get(message.author.id).nickname;
+  getNickname (messageObject) {
+    return messageObject.channel.members.get(message.author.id).nickname;
+  },
+
+  sendMessage (messageObject, messageToReturn) {
+    messageObject.channel.send(messageToReturn);
   }
 }

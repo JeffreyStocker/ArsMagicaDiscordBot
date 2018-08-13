@@ -1,9 +1,12 @@
 const { stress, botch, roll, simple, sum, stressSum } = require('./dice.js');
 const { giveNotificationBack, rolledMessage, ...discordUtil } = require ('./dicordCommands');
+const characterCommands = require ('./characterCommands');
+
 
 const spreadArray = function (array) {
   return ('[' + array + ']');
 }
+
 
 var stressMessage = function(roll) {
   if (roll === 'botch') {
@@ -11,6 +14,7 @@ var stressMessage = function(roll) {
   }
   return spreadArray(roll) + ' = ' + stressSum(roll);
 }
+
 
 module.exports = {
   botch (message, content) {
@@ -24,23 +28,7 @@ module.exports = {
     message.channel.send(output);
   },
 
-  create (message, content) {
-    message.channel.send('yep');
-    let name = content[1];
-    let author = message.author.id;
-    if (!name) {
-      message.channel.send('Please include a name for your character');
-    } else {
-      let char = new Character (name);
-      pouch.setChar(author, char)
-      // .then(results => {
-      //   console.log ('results', results);
-      // })
-      // .catch(err => {
-      //   console.log (err);
-      // });
-    }
-  },
+
 
   simple (message, content) {
     message.channel.send(simple());
@@ -77,17 +65,7 @@ module.exports = {
   ping(message, content) {
     giveNotificationBack(message, 'pong!');
   },
-
-  list (message, content) {
-    pouch.listCharacters(message.author.id)
-    .then(data => {
-      let output = '';
-      for (let [index, character] of Object.entries(data)) {
-        index = +index + 1;
-        output += index + ': ' + character.name + '\n';
-      }
-      message.channel.send(output);
-    })
-  },
+  ... characterCommands
 }
+
 

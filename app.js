@@ -2,9 +2,7 @@ const dotenv = require ('dotenv').config();
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
-const Character = require('./ars magica/Character');
 const command = require ('./handleCommands');
-const pouch = require('./pouch.js');
 
 client.on("ready", () => {
   console.log("I am ready!");
