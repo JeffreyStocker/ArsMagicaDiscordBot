@@ -7,9 +7,11 @@
     "discord": "^0.8.2",
     "discord.js": "^11.3.2",
     "dotenv": "^5.0.1",
+    "moment": "^2.21.0",
     "nedb": "^1.8.0",
     "npm": "^5.8.0",
     "pouchdb": "^6.4.3",
+    "pouchdb-find": "^6.4.3",
     "sqlite3": "^4.0.0"
   },
   "devDependencies": {},
