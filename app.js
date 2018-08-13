@@ -28,7 +28,7 @@ var processContent = function (message) {
 }
 
 client.on("message", (message) => {
-  var msg, content = processContent(message);
+  var content = processContent(message);
 
   if (!!content[0] && content[0].startsWith("!")) {
     content[0] = content[0].slice(1);
