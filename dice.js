@@ -55,12 +55,12 @@ module.exports.sum = function (sumArray = []) {
   }, 0);
 }
 
-module.exports.stressSum = function (sumArray = []) {
+module.exports.stressSum = function (sumArray = [], modifier = 0) {
   var minimum = (sumArray.length) * 5;
   var calculated = _.last(sumArray) * Math.pow(2, sumArray.length - 1);
   if (sumArray.length === 1) {
-    return module.exports.sum(sumArray);
+    return module.exports.sum(sumArray) + modifier;
   }
 
-  return (minimum > calculated) ? minimum : calculated;
+  return (minimum > calculated) ? minimum + modifier : calculated + modifier;
 }
