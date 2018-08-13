@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 
 const Character = require('./ars magica/Character');
-const { stress, botch, roll, simple, sum, stresSum } = require('./dice.js');
+const { stress, botch, roll, simple, sum, stressSum } = require('./dice.js');
 
 const pouch = require('./pouch.js');
 
@@ -25,6 +25,7 @@ client.on("message", (message) => {
   if (message.content.startsWith("!")) {
     var msg = message.content.slice(1);
     var content = msg.split(' ');
+
     if (content[0] === 'create') {
       message.channel.send('yep');
       let name = content[1];
@@ -41,6 +42,7 @@ client.on("message", (message) => {
         //   console.log (err);
         // });
       }
+
     } else if (content[0] === 'roll') {
     } else if (content[0] === 'simple') {
       message.channel.send(simple());
@@ -51,7 +53,7 @@ client.on("message", (message) => {
         message.channel.send('You rolled a Zero! \nRoll For Botch!');
         return;
       }
-      message.channel.send(spreadArray(rollResults) + ' = ' + stresSum(rollResults));
+      message.channel.send(spreadArray(rollResults) + ' = ' + stressSum(rollResults));
       console.log (rollResults);
     } else if (content[0] === 'botch') {
       botchResults = botch(content[1]);
