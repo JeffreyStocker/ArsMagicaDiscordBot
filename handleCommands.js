@@ -1,11 +1,19 @@
 const { stress, botch, roll, simple, sum, stressSum } = require('./dice.js');
+const { giveNotificationBack, rolledMessage, ...discordUtil } = require ('./dicordCommands');
 
 const spreadArray = function (array) {
   return ('[' + array + ']');
 }
 
+var stressMessage = function(roll) {
+  if (roll === 'botch') {
+    return 'You rolled a Zero! Roll For Botch!';
+  }
+  return spreadArray(roll) + ' = ' + stressSum(roll);
+}
+
 module.exports = {
-  botchCommand (message) {
+  botch (message, content) {
     var botchResults = botch(content[1]);
     var output = spreadArray (botchResults[0]) + '\n';
     if (botchResults[1] === 0) {
@@ -16,7 +24,7 @@ module.exports = {
     message.channel.send(output);
   },
 
-  create (message) {
+  create (message, content) {
     message.channel.send('yep');
     let name = content[1];
     let author = message.author.id;
@@ -34,25 +42,43 @@ module.exports = {
     }
   },
 
-  simple (message) {
+  simple (message, content) {
     message.channel.send(simple());
   },
 
-  stress(message) {
-    var rollResults = stress();
-    if (rollResults === 'botch') {
-      message.channel.send('You rolled a Zero! \nRoll For Botch!');
-      return;
+  stress(message, content) {
+    // var rollResults = stress();
+    // if (rollResults === 'botch') {
+    //   message.channel.send('You rolled a Zero! \nRoll For Botch!');
+    //   return;
+    // }
+    // message.channel.send(spreadArray(rollResults) + ' = ' + stressSum(rollResults));
+    // console.log (rollResults);
+    if (content[1] && content[1] > 1) {
+      let rolls = [];
+      for (count of new Array(Number(content[1]))) {
+        // let roll = stress();
+        rolls.push(stress());
+      }
+      let outGoingMessage = '';
+
+      for (let roll of rolls) {
+        outGoingMessage += stressMessage(roll) + '\n';
+      }
+      console.log (outGoingMessage)
+      rolledMessage(message, outGoingMessage);
+    } else {
+      let roll = stress();
+
+      rolledMessage(message, stressMessage(roll));
     }
-    message.channel.send(spreadArray(rollResults) + ' = ' + stressSum(rollResults));
-    console.log (rollResults);
   },
 
-  ping(message) {
-    message.channel.send("pong!");
+  ping(message, content) {
+    giveNotificationBack(message, 'pong!');
   },
 
-  list (message) {
+  list (message, content) {
     pouch.listCharacters(message.author.id)
     .then(data => {
       let output = '';
@@ -64,3 +90,4 @@ module.exports = {
     })
   },
 }
+
