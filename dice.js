@@ -46,7 +46,13 @@ module.exports.simple = function () {
 }
 
 module.exports.sum = function (sumArray = []) {
-  return sumArray.reduce((sum, val) => sum + val, 0);
+  return sumArray.reduce((sum, val) => {
+    val = Number (val);
+    if (typeof val !== 'number') {
+      return NaN;
+    }
+    return sum + val;
+  }, 0);
 }
 
 module.exports.stressSum = function (sumArray = []) {
