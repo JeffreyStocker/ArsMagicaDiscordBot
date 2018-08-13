@@ -10,44 +10,32 @@ client.on("ready", () => {
   console.log("I am ready!");
 });
 
-
-client.on("message", (message) => {
-  var botchResults, output;
-  if (message.content.startsWith("ping")) {
-    command.ping(message);
-  }
-  if (message.content.startsWith("!")) {
-    var msg = message.content.slice(1);
-    var content = msg.split(' ');
-
-    if (content[0] === 'create') {
-      command.create(message);
-    } else if (content[0] === 'roll') {
-
-    } else if (content[0] === 'simple') {
-      command.simple(message);
-    } else if (content[0] === 'stress') {
-      command.stress(message);
-    } else if (content[0] === 'botch') {
-      command.botch(message);
-    } else if (content[0] === 'help') {
-
-    } else if (content[0] === 'list') {
-      command.list(message);
-    } else if (content[0] === 'select') {
-
-    } else if (content[0] === 'selected') {
-    } else if (content[0] === 'select') {
-    } else if (content[0] === 'select') {
-    } else if (content[0] === 'select') {
-    } else if (content[0] === 'select') {
-    } else if (content[0] === 'select') {
-    } else if (content[0] === 'select') {
-    } else if (content[0] === 'select') {
-    } else if (content[0] === 'select') {
+var removeEmptyArraySpots = function (array) {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] === '') {
+      array.splice(i, 1);
+      i--;
     }
   }
+  return array;
+}
 
+var processContent = function (message) {
+  var msg = message.content.trim();
+  var content = msg.split(' ');
+  removeEmptyArraySpots(content);
+  return content;
+}
+
+client.on("message", (message) => {
+  var msg, content = processContent(message);
+
+  if (!!content[0] && content[0].startsWith("!")) {
+    content[0] = content[0].slice(1);
+    if (command.hasOwnProperty(content[0])) {
+      command[content[0]](message, content);
+    }
+  }
 });
 
 
