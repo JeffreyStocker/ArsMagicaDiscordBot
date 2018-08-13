@@ -3,8 +3,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 
 const Character = require('./ars magica/Character');
-const { stress, botch, roll, simple, sum, stressSum } = require('./dice.js');
-
+const command = require ('./handleCommands');
 const pouch = require('./pouch.js');
 
 client.on("ready", () => {
@@ -12,70 +11,29 @@ client.on("ready", () => {
 });
 
 
-var spreadArray = function (array) {
-  return ('[' + array + ']');
-}
-
-
 client.on("message", (message) => {
   var botchResults, output;
   if (message.content.startsWith("ping")) {
-    message.channel.send("pong!");
+    command.ping(message);
   }
   if (message.content.startsWith("!")) {
     var msg = message.content.slice(1);
     var content = msg.split(' ');
 
     if (content[0] === 'create') {
-      message.channel.send('yep');
-      let name = content[1];
-      let author = message.author.id;
-      if (!name) {
-        message.channel.send('Please include a name for your character');
-      } else {
-        let char = new Character (name);
-        pouch.setChar(author, char)
-        // .then(results => {
-        //   console.log ('results', results);
-        // })
-        // .catch(err => {
-        //   console.log (err);
-        // });
-      }
-
+      command.create(message);
     } else if (content[0] === 'roll') {
+
     } else if (content[0] === 'simple') {
-      message.channel.send(simple());
+      command.simple(message);
     } else if (content[0] === 'stress') {
-      // output = [1];
-      rollResults = stress();
-      if (rollResults === 'botch') {
-        message.channel.send('You rolled a Zero! \nRoll For Botch!');
-        return;
-      }
-      message.channel.send(spreadArray(rollResults) + ' = ' + stressSum(rollResults));
-      console.log (rollResults);
+      command.stress(message);
     } else if (content[0] === 'botch') {
-      botchResults = botch(content[1]);
-      output = spreadArray (botchResults[0]) + '\n';
-      if (botchResults[1] === 0) {
-        output += 'No Botches!';
-      } else {
-        output += 'Oh No! You got ' + botchResults[1] + ' botches!';
-      }
-      message.channel.send(output);
+      command.botch(message);
     } else if (content[0] === 'help') {
 
     } else if (content[0] === 'list') {
-      pouch.listCharacters(message.author.id)
-      .then(data => {
-        let output = '';
-        for (let [index, character] of Object.entries(data)) {
-          index = +index + 1;
-          output += index + ': ' + character.name + '\n';
-        }
-        message.channel.send(output);
-      })
+      command.list(message);
     } else if (content[0] === 'select') {
 
     } else if (content[0] === 'selected') {
