@@ -134,7 +134,7 @@ module.exports = {
   }
 }
 
-module.exports.count().then(data => console.log(data))
+// module.exports.count().then(data => console.log(data))
 
 var test = async function () {
   try {
