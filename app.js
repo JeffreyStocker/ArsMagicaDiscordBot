@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 
 const Character = require('./ars magica/Character');
-const { stress, botch, roll, simple } = require('./dice.js');
+const { stress, botch, roll, simple, sum, stresSum } = require('./dice.js');
 
 const pouch = require('./pouch.js');
 
@@ -29,25 +29,30 @@ client.on("message", (message) => {
       message.channel.send('yep');
       let name = content[1];
       let author = message.author.id;
-    } else if (content[0] === 'roll') {
-
-    } else if (content[0] === 'stress') {
-      output = [1];
-      // output = [...stress()];
-      if (output[0] === 0) {
-        message.channel.send('You rolled a Zero! \nRoll For Botch!');
-        return;
-      } else if (output[0] === 1) {
-        while(output[output.length - 1] === 1) {
-          output.push(...simple());
-        }
+      if (!name) {
+        message.channel.send('Please include a name for your character');
+      } else {
+        let char = new Character (name);
+        pouch.setChar(author, char)
+        // .then(results => {
+        //   console.log ('results', results);
+        // })
+        // .catch(err => {
+        //   console.log (err);
+        // });
       }
-      message.channel.send(spreadArray(output));
-      console.log (output);
-
+    } else if (content[0] === 'roll') {
     } else if (content[0] === 'simple') {
       message.channel.send(simple());
-
+    } else if (content[0] === 'stress') {
+      // output = [1];
+      rollResults = stress();
+      if (rollResults === 'botch') {
+        message.channel.send('You rolled a Zero! \nRoll For Botch!');
+        return;
+      }
+      message.channel.send(spreadArray(rollResults) + ' = ' + stresSum(rollResults));
+      console.log (rollResults);
     } else if (content[0] === 'botch') {
       botchResults = botch(content[1]);
       output = spreadArray (botchResults[0]) + '\n';
@@ -59,6 +64,27 @@ client.on("message", (message) => {
       message.channel.send(output);
     } else if (content[0] === 'help') {
 
+    } else if (content[0] === 'list') {
+      pouch.listCharacters(message.author.id)
+      .then(data => {
+        let output = '';
+        for (let [index, character] of Object.entries(data)) {
+          index = +index + 1;
+          output += index + ': ' + character.name + '\n';
+        }
+        message.channel.send(output);
+      })
+    } else if (content[0] === 'select') {
+
+    } else if (content[0] === 'selected') {
+    } else if (content[0] === 'select') {
+    } else if (content[0] === 'select') {
+    } else if (content[0] === 'select') {
+    } else if (content[0] === 'select') {
+    } else if (content[0] === 'select') {
+    } else if (content[0] === 'select') {
+    } else if (content[0] === 'select') {
+    } else if (content[0] === 'select') {
     }
   }
 
