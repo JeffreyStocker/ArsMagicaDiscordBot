@@ -1,3 +1,4 @@
+const _ = require('lodash');
 
 module.exports.rolls = rolls = function (lower = 0, upper = 9, count = 1, mod = 0) {
   var rollResults = [];
@@ -49,9 +50,9 @@ module.exports.sum = function (sumArray = []) {
 }
 
 module.exports.stressSum = function (sumArray = []) {
-  var minimum = (sumArray.length + 1) * 5;
-  var calculated = Math.pow(sumArray[sumArray.length - 1], sumArray.length - 1);
-  if (sumArray.length = 1) {
+  var minimum = (sumArray.length) * 5;
+  var calculated = _.last(sumArray) * Math.pow(2, sumArray.length - 1);
+  if (sumArray.length === 1) {
     return module.exports.sum(sumArray);
   }
 
