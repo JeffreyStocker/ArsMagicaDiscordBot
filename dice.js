@@ -48,17 +48,12 @@ module.exports.sum = function (sumArray = []) {
   return sumArray.reduce((sum, val) => sum + val, 0);
 }
 
-module.exports.stresSum = function (sumArray = []) {
-  var count = 1;
-  var sum = 0;
-  for (let val of sumArray) {
-    if (val === 1) {
-      count ++;
-      sum += 10;
-    } else {
-      sum += val;
-    }
+module.exports.stressSum = function (sumArray = []) {
+  var minimum = (sumArray.length + 1) * 5;
+  var calculated = Math.pow(sumArray[sumArray.length - 1], sumArray.length - 1);
+  if (sumArray.length = 1) {
+    return module.exports.sum(sumArray);
   }
-  sum = sum * Math.pow(count, 2);
-  return (count * 5 > sum) ? (count * 5) : (sum);
+
+  return (minimum > calculated) ? minimum : calculated;
 }
