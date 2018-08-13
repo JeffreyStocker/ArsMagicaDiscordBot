@@ -28,7 +28,7 @@ var processContent = function (message) {
 client.on("message", (message) => {
   var content = processContent(message);
 
-  if (!!content[0] && content[0].startsWith("!")) {
+  if (!!content[0] && content[0].startsWith(process.env.COMMAND || '!')) {
     content[0] = content[0].slice(1);
     if (command.hasOwnProperty(content[0])) {
       command[content[0]](message, content);
@@ -42,4 +42,23 @@ client.login(process.env.DISCORD_TOKEN)
   console.log ('Logged On');
 })
 .catch(err => {
-  console.log ('Error: ', err)});
+  console.log ('Error: ', err)
+});
+
+
+process.stdin.resume();
+
+var exitFunction = function (level) {
+  console.log('exiting at level:', level);
+  client.destroy()
+    .then (() => {
+      process.exit();
+    });
+}
+
+process.on('SIGUSR1', exitFunction.bind(this, 'SIGUSR1') );
+process.on('SIGUSR2', exitFunction.bind(this, 'SIGUSR2') );
+process.on('SIGTERM', exitFunction.bind(this, 'SIGTERM') );
+process.on('SIGINT', exitFunction.bind(this, 'SIGINT') );
+
+// process.on('exit', exitFunction.bind(this, 'exit'))
