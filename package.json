@@ -4,10 +4,12 @@
   "description": "beginning Discord Bot",
   "main": "app.js",
   "dependencies": {
+    "chai": "^4.1.2",
     "discord": "^0.8.2",
     "discord.js": "^11.4.1",
     "dotenv": "^5.0.1",
     "lodash": "^4.17.10",
+    "mocha": "^5.2.0",
     "moment": "^2.22.2",
     "nedb": "^1.8.0",
     "npm": "^5.10.0",
@@ -17,7 +19,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha *-test.js ",
   },
   "keywords": [
     "discord"
