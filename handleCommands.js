@@ -25,23 +25,17 @@ module.exports = {
     } else {
       output += 'Oh No! You got ' + botchResults[1] + ' botches!';
     }
-    message.channel.send(output);
+    rolledMessage(message, output);
   },
 
 
 
   simple (message, content) {
+
     message.channel.send(simple());
   },
 
   stress(message, content) {
-    // var rollResults = stress();
-    // if (rollResults === 'botch') {
-    //   message.channel.send('You rolled a Zero! \nRoll For Botch!');
-    //   return;
-    // }
-    // message.channel.send(spreadArray(rollResults) + ' = ' + stressSum(rollResults));
-    // console.log (rollResults);
     if (content[1] && content[1] > 1) {
       let rolls = [];
       for (count of new Array(Number(content[1]))) {
@@ -65,6 +59,7 @@ module.exports = {
   ping(message, content) {
     giveNotificationBack(message, 'pong!');
   },
+
   ... characterCommands
 }
 
