@@ -1,5 +1,5 @@
 
-module.exports.Character = class Character {
+module.exports = class Character {
   constructor(name, attributes, arts) {
     this.name = name;
     this.attribute = {
