@@ -45,14 +45,14 @@ module.exports.simple = function () {
   return module.exports.roll(1, 10);
 }
 
-module.exports.sum = function (sumArray = []) {
+module.exports.sum = function (sumArray = [], modfier = 0) {
   return sumArray.reduce((sum, val) => {
     val = Number (val);
     if (typeof val !== 'number') {
       return NaN;
     }
     return sum + val;
-  }, 0);
+  }, 0) + modfier;
 }
 
 module.exports.stressSum = function (sumArray = [], modifier = 0) {
