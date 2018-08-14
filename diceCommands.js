@@ -22,7 +22,9 @@ const returnModifier = function returnModifier (rollString) {
 }
 
 const processRoll = function processRoll (content) {
-  var output = {
+  var output;
+  content = removeSpaces(content);
+  output = {
     modifier: returnModifier(content),
     diceCount: content.match(/^\d*/)[0] || 1
   };
@@ -152,6 +154,32 @@ module.exports = {
   ping(message, content) {
     giveNotificationBack(message, 'pong!');
   },
+
+  roll (message, content) {
+    var rolls = [];
+    var rollObj = processRoll(content);
+    let x = 0;
+    var output = '';
+
+    while (x < rollObj.diceCount) {
+      x++;
+      rolls.push(roll(1, rollObj.diceSize));
+    }
+    let rollResult = rolls.reduce ((sum, val) => (sum + val));
+
+    let sum = rollResult + rollObj.modifier;
+    output += `[${rolls}]${printMod(rollObj.modifier)} = ${sum}\n`
+    rolledMessage(message, output);
+  }
 }
 
 
+const printMod = function printMod (modifier) {
+  if (modifier === 0) {
+    return '';
+  } else if (modifier > 0) {
+    return '+' + modifier;
+  } else if (modifier < 0) {
+    return '-' + modifier;
+  }
+}
