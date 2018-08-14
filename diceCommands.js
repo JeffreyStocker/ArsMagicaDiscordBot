@@ -5,6 +5,59 @@ const spreadArray = function (array) {
   return ('[' + array + ']');
 }
 
+const removeSpaces = function (string) {
+  content.trim();
+  content.replace (' ', '');
+  return content;
+}
+
+const returnModifier = function returnModifier (rollString) {
+  let add = rollString.match(/\+[0-9]*/g);
+  let sub = rollString.match(/\-[0-9]*/g);
+
+  add = add === null ? 0 : add.reduce((sum, val) => ( sum + Number(val) ), 0);
+  sub = sub === null ? 0 : sub.reduce((sum, val) => ( sum + Number(val) ), 0);
+
+  return add + sub;
+}
+
+const processRoll = function processRoll (content) {
+  var output = {
+    modifier: returnModifier(content),
+    diceCount: content.match(/^\d*/)[0] || 1
+  };
+
+  let diceSize = content.match(/(d\d*)/)[0] || 1;
+  if (diceSize === null) {
+    return null;
+  } else {
+    output.diceSize = diceSize.slice(1);
+  }
+
+  return output;
+}
+
+console.log (processRoll ('1d4+5+10-3-10-99+11'))
+
+const processStressContent = function processStressContent (content = 1) {
+  var reg = /[+,-]/g;
+  content = removeSpaces(content);
+  let newContent = content.replace (reg, (match, offset, string) => {
+    return '|*|' + match + '|*|';
+  });
+
+  newContent = newContent.split('|*|').map((el) => (isNaN(Number(el)) ? el : Number(el)));
+
+  if (newContent[0] === '' || newContent[0] === 0 ) {
+    newContent[0] = 1;
+  }
+  console.log ('processStressContent', newContent)
+  return newContent;
+}
+
+const arthmatic = [ '+', '-', '*', '/'];
+
+
 var calcModifier = function (modArray) {
   var sum = 0;
 
@@ -31,6 +84,9 @@ var calcModifier = function (modArray) {
       calcModifierArthFunctions[modArray[i]] (modArray[i + 1]);
     }
   }
+  if (isNaN(sum)) {
+    return 0;
+  }
   return sum;
 }
 
@@ -39,8 +95,8 @@ var modifierMessage = function (modifier) {
   return modifier ? '+' + modifier : '';
 }
 
+
 var stressMessage = function(roll, modifier) {
-  var modifierMessage;
   if (roll === 'botch') {
     return 'You rolled a Zero! Roll For Botch!';
   }
@@ -51,7 +107,7 @@ var stressMessage = function(roll, modifier) {
 
 module.exports = {
   botch (message, content) {
-    var botchResults = botch(content[1]);
+    var botchResults = botch(content === '' ? 1: content);
     var output = spreadArray (botchResults[0]) + '\n';
     if (botchResults[1] === 0) {
       output += 'No Botches!';
@@ -74,27 +130,24 @@ module.exports = {
     rolledMessage(message, output);
   },
 
+
   stress(message, content) {
-    if (content[1] && content[1] > 1) {
-      let rolls = [];
-      for (count of new Array(Number(content[1]))) {
-        // let roll = stress();
-        rolls.push(stress());
-      }
-      let outGoingMessage = '';
+    var count, modifier;
+    var processed = processStressContent(content);
 
-      for (let [count, roll] of Object.entries(rolls)) {
-        count++;
-        outGoingMessage += count + '. ' + stressMessage(roll, calcModifier(content.slice(2))) + '\n';
-      }
-      console.log (outGoingMessage)
-      rolledMessage(message, outGoingMessage);
-    } else {
-      let roll = stress();
+    count = Number(processed[0]);
+    modifier = calcModifier(processed.slice(1));
 
-      rolledMessage(message, stressMessage(roll, calcModifier(content.slice(2))));
+    console.log ('mod', modifier)
+    let outGoingMessage = '';
+
+    for (let i = 0; i < count; i++) {
+      outGoingMessage += i + 1 + '. ' + stressMessage(stress(), modifier) + '\n';
     }
+    console.log (outGoingMessage)
+    rolledMessage(message, outGoingMessage);
   },
+
 
   ping(message, content) {
     giveNotificationBack(message, 'pong!');
