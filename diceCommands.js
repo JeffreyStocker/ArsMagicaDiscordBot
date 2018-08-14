@@ -5,10 +5,10 @@ const spreadArray = function (array) {
   return ('[' + array + ']');
 }
 
-const removeSpaces = function (string) {
-  content.trim();
-  content.replace (' ', '');
-  return content;
+const removeSpaces = function (rollString) {
+  rollString.trim();
+  rollString.replace (' ', '');
+  return rollString;
 }
 
 const returnModifier = function returnModifier (rollString) {
