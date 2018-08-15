@@ -30,7 +30,11 @@ const removeFirstLetter = function (str) {
 
 const returnFirstValOrDefaultIfNull = function returnFirstValOrDefaultIfNull(val, def = 1) {
   return val === null ? def : val[0];
-  }
+}
+
+const handleDiceMod = function (diceString, regStr, def) {
+  return Number(removeFirstLetter(returnFirstValOrDefaultIfNull(diceString.match(regStr), def )))
+}
 
 const processRoll = function processRoll (content) {
   var output;
@@ -38,13 +42,13 @@ const processRoll = function processRoll (content) {
   output = {
     modifier: Number(returnModifier(content)),
     diceCount: Number(returnFirstValOrDefaultIfNull(content.match(/^\d+/) )),
-    diceSize: Number(removeFirstLetter(returnFirstValOrDefaultIfNull(content.match(/(d\d+)/), 'd1' ))),
-    repeat: content.match(/(x[0-9]*)/)
+    diceSize: handleDiceMod(content, (/(d\d+)/), 'd1' ),
+    repeat: handleDiceMod(content, /(x[0-9]*)/)
   };
   return output;
 }
 
-console.log (processRoll ('1d4+5+10-3-10-99+11'))
+// console.log (processRoll ('1d4+5+10-3-10-99+11'))
 
 const processStressContent = function processStressContent (content = 1) {
   var reg = /[+,-]/g;
@@ -178,6 +182,7 @@ module.exports = {
 
     let sum = rollResult + rollObj.modifier;
     output += `[${rolls}]${printMod(rollObj.modifier)} = ${sum}\n`
+    console.log (rollObj);
     rolledMessage(message, output);
   }
 }
