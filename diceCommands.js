@@ -21,21 +21,26 @@ const returnModifier = function returnModifier (rollString) {
   return add + sub;
 }
 
+const removeFirstLetter = function (str) {
+  if (typeof str !== 'string') {
+    return str;
+  }
+  return str.slice(1);
+}
+
+const returnFirstValOrDefaultIfNull = function returnFirstValOrDefaultIfNull(val, def = 1) {
+  return val === null ? def : val[0];
+  }
+
 const processRoll = function processRoll (content) {
   var output;
   content = removeSpaces(content);
   output = {
-    modifier: returnModifier(content),
-    diceCount: content.match(/^\d*/)[0] || 1
+    modifier: Number(returnModifier(content)),
+    diceCount: Number(returnFirstValOrDefaultIfNull(content.match(/^\d+/) )),
+    diceSize: Number(removeFirstLetter(returnFirstValOrDefaultIfNull(content.match(/(d\d+)/), 'd1' ))),
+    repeat: content.match(/(x[0-9]*)/)
   };
-
-  let diceSize = content.match(/(d\d*)/)[0] || 1;
-  if (diceSize === null) {
-    return null;
-  } else {
-    output.diceSize = diceSize.slice(1);
-  }
-
   return output;
 }
 
@@ -150,6 +155,10 @@ module.exports = {
     rolledMessage(message, outGoingMessage);
   },
 
+  stress2(message, content) {
+
+  },
+
 
   ping(message, content) {
     giveNotificationBack(message, 'pong!');
@@ -165,7 +174,7 @@ module.exports = {
       x++;
       rolls.push(roll(1, rollObj.diceSize));
     }
-    let rollResult = rolls.reduce ((sum, val) => (sum + val));
+    let rollResult = rolls.reduce ((sum, val) => (sum + val), 0);
 
     let sum = rollResult + rollObj.modifier;
     output += `[${rolls}]${printMod(rollObj.modifier)} = ${sum}\n`
