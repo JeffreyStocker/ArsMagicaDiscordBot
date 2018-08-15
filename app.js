@@ -49,7 +49,11 @@ client.login(process.env.DISCORD_TOKEN)
   });
 
 client.on('error', function (err) {
-  console.log (err)
+  if (err.message = 'read ECONNRESET') {
+    console.log('diconnected');
+  } else {
+    console.log (err.message);
+  }
 })
 
 
