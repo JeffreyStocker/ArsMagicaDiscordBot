@@ -21,7 +21,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "mocha *-test.js ",
-    "start": "node app.js"
+    "start": "node app.js",
+    "debug": "nodemon --inspect app.js"
   },
   "keywords": [
     "discord"
