@@ -1,6 +1,6 @@
 module.exports = {
   giveNotificationBack(messageObject, messageToReturn) {
-    messageObject.channel.send(messageObject.author + '\n' + messageToReturn);
+    messageObject.channel.send(messageObject.author + ' ' + messageToReturn);
   },
 
   rolledMessage(messageObject, messageToReturn) {
@@ -17,5 +17,9 @@ module.exports = {
 
   sendMessage (messageObject, messageToReturn) {
     messageObject.channel.send(messageToReturn);
+  },
+
+  sendDm (messageObject, messageToReturn) {
+    messageObject.author.send(messageToReturn);
   }
 };
