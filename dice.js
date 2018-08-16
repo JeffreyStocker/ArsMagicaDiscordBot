@@ -1,15 +1,15 @@
 const _ = require('lodash');
 
-module.exports.rolls = rolls = function (lower = 0, upper = 9, count = 1, mod = 0) {
+module.exports.rollDice = function (lower = 0, upper = 9, count = 1, mod = 0) {
   var rollResults = [];
   for (let i = 0; i < count; i++) {
-    rollResults.push(module.exports.roll(lower, upper) + mod);
+    rollResults.push(module.exports.rollDie(lower, upper) + mod);
   }
   // console.log(rollResults)
   return rollResults;
 }
 
-module.exports.roll = function (lower = 1, upper = 1, mod = 0) {
+module.exports.rollDie = function (lower = 1, upper = 1, mod = 0) {
   return Math.floor((Math.random() * upper) + lower) + mod;
 }
 
@@ -24,14 +24,14 @@ module.exports.countBotch = countBotch = function (rolls) {
 }
 
 
-module.exports.botch = function (numberOfDice) {
-  var rollResults = rolls(0, 9, numberOfDice);
+module.exports.rollBotch = function (numberOfDice) {
+  var rollResults = module.exports.rollDice(0, 9, numberOfDice);
 
   return [rollResults, countBotch(rollResults)];
 }
 
 
-module.exports.stress = function () {
+module.exports.rollStress = function () {
   var rollResults = [module.exports.roll(0, 9)];
   if (rollResults[0] === 0) { return 'botch'; }
   while (rollResults[rollResults.length -1 ] === 1){
@@ -41,7 +41,7 @@ module.exports.stress = function () {
 }
 
 
-module.exports.simple = function () {
+module.exports.rollSimple = function () {
   return module.exports.roll(1, 10);
 }
 
