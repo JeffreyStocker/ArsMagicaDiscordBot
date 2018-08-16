@@ -1,11 +1,11 @@
 const dotenv = require ('dotenv').config();
-const Discord = require("discord.js");
+const Discord = require('discord.js');
 const client = new Discord.Client();
 
 const command = require ('./handleCommands');
 
-client.on("ready", () => {
-  console.log("I am ready!");
+client.on('ready', () => {
+  console.log('I am ready!');
 });
 
 var removeEmptyArraySpots = function (array) {
@@ -16,15 +16,15 @@ var removeEmptyArraySpots = function (array) {
     }
   }
   return array;
-}
+};
 
 var processContent = function (message) {
   var msg = message.content.trim();
   var [com, ...content] = msg.split(' ');
   return [com, content.join('')];
-}
+};
 
-client.on("message", (message) => {
+client.on('message', (message) => {
   var [com, content] = processContent(message);
 
   if (!!com && com.startsWith(process.env.COMMAND || '!')) {
@@ -45,7 +45,7 @@ client.login(process.env.DISCORD_TOKEN)
     console.log ('Logged On');
   })
   .catch(err => {
-    console.log ('Error: ', err)
+    console.log ('Error: ', err);
   });
 
 client.on('error', function (err) {
@@ -54,7 +54,7 @@ client.on('error', function (err) {
   } else {
     console.log (err.message);
   }
-})
+});
 
 
 process.stdin.resume();
@@ -65,7 +65,7 @@ var exitFunction = function (level, restart = false) {
     .then (() => {
       restart ? process.kill(process.pid, 'SIGUSR2') : process.exit();
     });
-}
+};
 
 process.on('SIGUSR1', exitFunction.bind(this, 'SIGUSR1') );
 // process.on('SIGUSR2', exitFunction.bind(this, 'SIGUSR2') );
