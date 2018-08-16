@@ -8,7 +8,7 @@ module.exports = {
   },
 
   reply (messageObject, messageToReturn) {
-    messageObject.reply(messageToReturn)
+    messageObject.reply(messageToReturn);
   },
 
   getNickname (messageObject) {
@@ -18,4 +18,4 @@ module.exports = {
   sendMessage (messageObject, messageToReturn) {
     messageObject.channel.send(messageToReturn);
   }
-}
+};

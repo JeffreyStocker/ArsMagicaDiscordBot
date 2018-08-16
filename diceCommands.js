@@ -1,16 +1,17 @@
 const inspect = require('util').inspect;
 const { rollStress, rollBotch, rollDie, rollDice, rollSimple, sum, stressSum } = require('./dice.js');
-const { giveNotificationBack, rolledMessage, ...discordUtil } = require ('./dicordCommands');
+const { giveNotificationBack, rolledMessage } = require ('./dicordCommands');
+
 
 const spreadArray = function (array) {
   return ('[' + array + ']');
-}
+};
 
 const removeSpaces = function (rollString) {
   rollString.trim();
   rollString.replace (' ', '');
   return rollString;
-}
+};
 
 const returnModifier = function returnModifier (rollString) {
   let add = rollString.match(/\+[0-9]*/g);
@@ -20,22 +21,22 @@ const returnModifier = function returnModifier (rollString) {
   sub = sub === null ? 0 : sub.reduce((sum, val) => ( sum + Number(val) ), 0);
 
   return add + sub;
-}
+};
 
 const removeFirstLetter = function (str) {
   if (typeof str !== 'string') {
     return str;
   }
   return str.slice(1);
-}
+};
 
 const returnFirstValOrDefaultIfNull = function returnFirstValOrDefaultIfNull(val, def = 1) {
   return val === null ? def : val[0];
-}
+};
 
 const handleDiceMod = function (diceString, regStr, def) {
-  return Number(removeFirstLetter(returnFirstValOrDefaultIfNull(diceString.match(regStr), def )))
-}
+  return Number(removeFirstLetter(returnFirstValOrDefaultIfNull(diceString.match(regStr), def )));
+};
 
 const processRoll = function processRoll (content) {
   var output;
@@ -46,8 +47,11 @@ const processRoll = function processRoll (content) {
     diceSize: handleDiceMod(content, (/(d\d+|ds|ds)/), 'd1' ),
     repeat: handleDiceMod(content, /(x[0-9]*)/)
   };
+  if (output.diceSize === 0) {
+    // [output.diceSize, output.diceCount, output.repeat] = [1, 1, output.diceCount + (output.repeat === 1 ? 0 : output.repeat)];
+  }
   return output;
-}
+};
 
 // console.log (processRoll ('1d4+5+10-3-10-99+11'))
 
@@ -63,13 +67,13 @@ const processStressContent = function processStressContent (content = 1) {
   if (newContent[0] === '' || newContent[0] === 0 ) {
     newContent[0] = 1;
   }
-  console.log ('processStressContent', newContent)
+  console.log ('processStressContent', newContent);
   return newContent;
-}
+};
 
 const splitCommands = function (commandStr) {
   return commandStr.split(',');
-}
+};
 
 
 var calcModifier = function (modArray) {
@@ -93,7 +97,7 @@ var calcModifier = function (modArray) {
     }
   };
 
-  for (var i = 0; i < modArray.length; i+=2) {
+  for (var i = 0; i < modArray.length; i += 2) {
     if (calcModifierArthFunctions.hasOwnProperty(modArray[i])) {
       calcModifierArthFunctions[modArray[i]] (modArray[i + 1]);
     }
@@ -102,12 +106,12 @@ var calcModifier = function (modArray) {
     return 0;
   }
   return sum;
-}
+};
 
 
 var modifierMessage = function (modifier) {
   return modifier ? '+' + modifier : '';
-}
+};
 
 
 var stressMessage = function(roll, modifier) {
@@ -116,12 +120,12 @@ var stressMessage = function(roll, modifier) {
   }
 
   return spreadArray(roll) + modifierMessage(modifier) + ' = ' + stressSum(roll, modifier);
-}
+};
 
 
 module.exports = {
   botch (message, content) {
-    var botchResults = rollBotch(content === '' ? 1: content);
+    var botchResults = rollBotch(content === '' ? 1 : content);
     var output = spreadArray (botchResults[0]) + '\n';
     if (botchResults[1] === 0) {
       output += 'No Botches!';
@@ -152,13 +156,13 @@ module.exports = {
     count = Number(processed[0]);
     modifier = calcModifier(processed.slice(1));
 
-    console.log ('mod', modifier)
+    console.log ('mod', modifier);
     let outGoingMessage = '';
 
     for (let i = 0; i < count; i++) {
       outGoingMessage += i + 1 + '. ' + stressMessage(rollStress(), modifier) + '\n';
     }
-    console.log (outGoingMessage)
+    console.log (outGoingMessage);
     rolledMessage(message, outGoingMessage);
   },
 
@@ -170,7 +174,7 @@ module.exports = {
     rollObj.processedCommands = rollObj.commands.map( val => {
       let processed = processRoll (val);
       processed.diceSize = 10;
-      return processed
+      return processed;
     });
 
     rollObj.rolls = rollObj.processedCommands.map (val => {
@@ -182,13 +186,13 @@ module.exports = {
           if (rollVal === 1) {
             let explosion = [1];
             let current = 1;
-            while(current === 1) {
+            while (current === 1) {
               current = rollDie(1, val.diceSize);
               explosion.push(current);
             }
             return explosion;
-          } else if (rollVal === 0) {
-            return 'botch'
+          } else if (rollVal === 10) {
+            return 'botch';
           }
           return rollVal;
         }));
@@ -196,28 +200,46 @@ module.exports = {
       return currentRolls;
     });
 
-    rollObj.sums = rollObj.rolls.map((roll, index) => {
-      return roll.reduce((sum, val) => {
-        if (Array.isArray(val)) {
-          return sum + val.reduce ((sum, val) => {
-            if (Array.isArray(val)) {
-              return sum + stressSum(val);
-            }
-            return sum + val;
-          }, 0) + rollObj.processedCommands[index].modifier;
-        } else {
-          return sum + val + rollObj.processedCommands[index].modifier;
-        }
+    rollObj.sums = rollObj.rolls.map((rolls, index) => {
+      return rolls.map((roll) => {
+        return roll.reduce((sum, val) => {
+          if (val === 'botch' || sum === 'botch') {
+            return 'botch';
+          }
+          if (Array.isArray(val)) {
+            return sum + stressSum(val) + rollObj.processedCommands[index].modifier;
+          } else {
+            return sum + val + rollObj.processedCommands[index].modifier;
+          }
+        }, 0);
       }, 0);
     });
 
     rollObj.messages = rollObj.rolls.map((rolls, commandIndex) => {
-      return rolls.reduce((msg, roll, rollIndex) => {
-        return msg + `${JSON.stringify(roll)}${printMod(rollObj.processedCommands[commandIndex].modifier)} = ${rollObj.sums[commandIndex]}\n`
-      }, '')
+      var command = rollObj.processedCommands[commandIndex];
+      var mod = command.modifier;
+
+      var totalSum = 0;
+      var hasBotch = false;
+      var msg = rolls.reduce((msg, roll, rollIndex) => {
+        var rollMessage;
+        var rollSum = rollObj.sums[commandIndex][rollIndex];
+        if (roll === 'botch') {
+          hasBotch = true;
+          return msg;
+        }
+        rollMessage = msg + `${rollIndex + 1}: ${JSON.stringify(roll)}${printMod(mod)} = ${rollSum}\n`;
+        totalSum += rollSum;
+
+        if (command.repeat > 1) {
+          return rollIndex + 1 !== rolls.length ? rollMessage : rollMessage + `Total = ${totalSum}`;
+        }
+        return rollMessage;
+      }, `rolled ${rollObj.commands[commandIndex]}\n`);
+      return hasBotch ? msg + ' & You rolled a Zero! Roll For Botch!' : msg;
     });
 
-    rollObj.messages.forEach(messageStr => { rolledMessage(message, messageStr)});
+    rollObj.messages.forEach(messageStr => { giveNotificationBack(message, messageStr); });
     console.log (rollObj);
   },
 
@@ -239,7 +261,7 @@ module.exports = {
     let rollResult = rolls.reduce ((sum, val) => (sum + val), 0);
 
     let sum = rollResult + rollObj.modifier;
-    output += `[${rolls}]${printMod(rollObj.modifier)} = ${sum}\n`
+    output += `[${rolls}]${printMod(rollObj.modifier)} = ${sum}\n`;
     console.log (rollObj);
     rolledMessage(message, output);
   },
@@ -268,7 +290,6 @@ module.exports = {
           }
         }, 0);
       }, 0);
-
     });
 
     // rollObj.messages = rollObj.rolls.map((roll, index) => {
@@ -281,22 +302,23 @@ module.exports = {
       let totalSum = 0;
       return rolls.reduce((msg, roll, rollIndex) => {
         var rollSum = rollObj.sums[commandIndex][rollIndex];
+        var rollMessage = msg + `${rollIndex + 1}: ${JSON.stringify(roll)}${printMod(mod)} = ${rollSum}\n`;
         totalSum += rollSum;
-        var rollMessage = msg + `${rollIndex + 1}: ${JSON.stringify(roll)}${printMod(mod)} = ${rollSum}\n`
+
         if (command.repeat > 1) {
           return rollIndex + 1 !== rolls.length ? rollMessage : rollMessage + `Total = ${totalSum}`;
         }
         return rollMessage;
-      }, `rolled ${rollObj.commands[commandIndex]}\n`)
+      }, `rolled ${rollObj.commands[commandIndex]}\n`);
     });
 
-    rollObj.messages.forEach(messageStr => { giveNotificationBack(message, messageStr)});
+    rollObj.messages.forEach(messageStr => { giveNotificationBack(message, messageStr); });
 
 
     console.log(inspect(rollObj, { depth: 4 }));
   }
 
-}
+};
 
 
 const printMod = function printMod (modifier) {
@@ -307,7 +329,7 @@ const printMod = function printMod (modifier) {
   } else if (modifier < 0) {
     return String(modifier);
   }
-}
+};
 
 const getRolls = function (count, diceSize) {
   var rolls = [];
@@ -315,8 +337,8 @@ const getRolls = function (count, diceSize) {
     rolls.push(rollDie(1, diceSize));
   }
   return rolls;
-}
+};
 
 const printRolls = function (rolls) {
 
-}
+};
