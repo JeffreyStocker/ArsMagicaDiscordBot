@@ -1,6 +1,7 @@
 const inspect = require('util').inspect;
 const { rollStress, rollBotch, rollDie, rollDice, rollSimple, sum, stressSum } = require('./dice.js');
-const { giveNotificationBack, rolledMessage } = require ('./dicordCommands');
+const discordCommands = require ('./dicordCommands');
+const { giveNotificationBack, rolledMessage } = discordCommands;
 
 
 const spreadArray = function (array) {
@@ -218,29 +219,31 @@ module.exports = {
     rollObj.messages = rollObj.rolls.map((rolls, commandIndex) => {
       var command = rollObj.processedCommands[commandIndex];
       var mod = command.modifier;
-
       var totalSum = 0;
       var hasBotch = false;
+
       var msg = rolls.reduce((msg, roll, rollIndex) => {
         var rollMessage;
         var rollSum = rollObj.sums[commandIndex][rollIndex];
-        if (roll === 'botch') {
-          hasBotch = true;
-          return msg;
-        }
         rollMessage = msg + `${rollIndex + 1}: ${JSON.stringify(roll)}${printMod(mod)} = ${rollSum}\n`;
-        totalSum += rollSum;
+
+        if (rollSum === 'botch') {
+          hasBotch = true;
+        } else {
+          totalSum += rollSum;
+        }
 
         if (command.repeat > 1) {
           return rollIndex + 1 !== rolls.length ? rollMessage : rollMessage + `Total = ${totalSum}`;
         }
         return rollMessage;
-      }, `rolled ${rollObj.commands[commandIndex]}\n`);
+      }, `rolled Stress!st ${rollObj.commands[commandIndex]}\n`);
       return hasBotch ? msg + ' & You rolled a Zero! Roll For Botch!' : msg;
     });
 
     rollObj.messages.forEach(messageStr => { giveNotificationBack(message, messageStr); });
     console.log (rollObj);
+    discordCommands.sendDm(message);
   },
 
 
