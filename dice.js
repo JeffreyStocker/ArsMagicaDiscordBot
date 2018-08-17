@@ -35,14 +35,14 @@ module.exports.rollStress = function () {
   var rollResults = [module.exports.roll(0, 9)];
   if (rollResults[0] === 0) { return 'botch'; }
   while (rollResults[rollResults.length - 1] === 1) {
-    rollResults.push(module.exports.roll(1, 10));
+    rollResults.push(module.exports.rollDie(1, 10));
   }
   return rollResults;
 };
 
 
 module.exports.rollSimple = function () {
-  return module.exports.roll(1, 10);
+  return module.exports.rollDie(1, 10);
 };
 
 module.exports.sum = function (sumArray = [], modfier = 0) {
