@@ -28,7 +28,7 @@ client.on('message', (message) => {
   var [com, content] = processContent(message);
 
   if (!!com && com.startsWith(process.env.COMMAND || '!')) {
-    com = com.slice(1);
+    com = com.slice(1).toLowerCase();
     if (command.hasOwnProperty(com)) {
       try {
         command[com](message, content);
