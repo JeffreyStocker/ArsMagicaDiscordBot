@@ -243,7 +243,6 @@ module.exports = {
 
     rollObj.messages.forEach(messageStr => { giveNotificationBack(message, messageStr); });
     console.log (rollObj);
-    discordCommands.sendDm(message);
   },
 
 
