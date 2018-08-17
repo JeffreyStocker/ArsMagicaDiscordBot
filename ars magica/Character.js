@@ -1,7 +1,9 @@
 
 module.exports = class Character {
-  constructor(name, attributes, arts) {
+  constructor(name, user, { attributes = {}, arts = {}, id = undefined } = {}) {
     this.name = name;
+    this.user = user;
+    this._id = id;
     this.attribute = {
       str: 0,
       dex: 0,
@@ -10,7 +12,7 @@ module.exports = class Character {
       int: 0,
       qui: 0,
       sta: 0,
-    }
+    };
     this.size = 0;
     this.arts = {
       cr: null,
@@ -28,8 +30,9 @@ module.exports = class Character {
       me: null,
       te: null,
       vi: null,
-    }
+    };
     attributes && this.setAllAttributes(attributes);
+    arts && this.setAllAttributes(arts);
   }
 
   setAttribute(name, val) {
@@ -39,9 +42,24 @@ module.exports = class Character {
     }
     return false;
   }
+
   setAllAttributes (data) {
     for (let attribute of Object.keys(data)) {
       this.setAttribute(attribute, data[attribute]);
+    }
+  }
+
+  setArt(name, val) {
+    if (this.arts[name]) {
+      this.arts[name] = val;
+      return true;
+    }
+    return false;
+  }
+
+  setArts (data) {
+    for (let art of Object.keys(data)) {
+      this.setArts(art, data[art]);
     }
   }
 
@@ -58,4 +76,4 @@ module.exports = class Character {
     }
     return output;
   }
-}
+};
