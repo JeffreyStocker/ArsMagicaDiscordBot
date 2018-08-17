@@ -141,11 +141,11 @@ module.exports = {
   simple (message, content) {
     var output = '';
     var count = Number(content[1]) + 1;
-    if (content[1] && content[1] > 1) {
-      for (var i = 1; i < count; i++) {
-        output += i + '. ' + rollSimple() + '\n';
-      }
+
+    for (var i = 1, stop = isNaN(count) ? 1 : count; i < stop + 1; i++) {
+      output += i + '. ' + rollSimple() + '\n';
     }
+
     rolledMessage(message, output);
   },
 
@@ -237,7 +237,7 @@ module.exports = {
           return rollIndex + 1 !== rolls.length ? rollMessage : rollMessage + `Total = ${totalSum}`;
         }
         return rollMessage;
-      }, `rolled Stress!st ${rollObj.commands[commandIndex]}\n`);
+      }, `rolled Stress! ${rollObj.commands[commandIndex]}\n`);
       return hasBotch ? msg + ' & You rolled a Zero! Roll For Botch!' : msg;
     });
 
@@ -295,9 +295,6 @@ module.exports = {
       }, 0);
     });
 
-    // rollObj.messages = rollObj.rolls.map((roll, index) => {
-    //   return `[${roll}]${printMod(rollObj.processedCommands[index].modifier)} = ${rollObj.sums[index]}\n`
-    // }, '');
     rollObj.messages = rollObj.rolls.map((rolls, commandIndex) => {
       var command = rollObj.processedCommands[commandIndex];
       var mod = command.modifier;
