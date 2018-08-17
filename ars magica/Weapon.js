@@ -1,7 +1,7 @@
 
 export class Weapon {
   constructor(name) {
-    this.name
+    this.name = name;
   }
   pickWeapons(name) {
 
@@ -10,4 +10,4 @@ export class Weapon {
 
 var weapons = {
 
-}
+};
