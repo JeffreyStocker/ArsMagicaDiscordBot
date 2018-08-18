@@ -228,7 +228,7 @@ module.exports = {
       var msg = rolls.reduce((msg, roll, rollIndex) => {
         var rollMessage;
         var rollSum = rollObj.sums[commandIndex][rollIndex];
-        rollMessage = msg + `${rollIndex + 1}: ${JSON.stringify(roll)}${printMod(mod)} = ${rollSum}\n`;
+        rollMessage = msg + `**${rollIndex + 1}**: ${JSON.stringify(roll)}${printMod(mod)} = ${rollSum}\n`;
 
         if (rollSum === 'botch') {
           hasBotch = true;
@@ -237,11 +237,11 @@ module.exports = {
         }
 
         if (command.repeat > 1) {
-          return rollIndex + 1 !== rolls.length ? rollMessage : rollMessage + `Total = ${totalSum}`;
+          return rollIndex + 1 !== rolls.length ? rollMessage : rollMessage + `**Total** = ${totalSum}`;
         }
         return rollMessage;
-      }, `rolled Stress! ${rollObj.commands[commandIndex]}\n`);
-      return hasBotch ? msg + ' & You rolled a Zero! Roll For Botch!' : msg;
+      }, `rolled :game_die: Stress! ${rollObj.commands[commandIndex]}\n`);
+      return hasBotch ? msg + ' & You rolled a Zero! Roll For **Botch**!' : msg;
     });
 
     rollObj.messages.forEach(messageStr => { giveNotificationBack(message, messageStr); });
@@ -304,14 +304,14 @@ module.exports = {
       let totalSum = 0;
       return rolls.reduce((msg, roll, rollIndex) => {
         var rollSum = rollObj.sums[commandIndex][rollIndex];
-        var rollMessage = msg + `${rollIndex + 1}: ${JSON.stringify(roll)}${printMod(mod)} = ${rollSum}\n`;
+        var rollMessage = msg + `**${rollIndex + 1}**: ${JSON.stringify(roll)}${printMod(mod)} = ${rollSum}\n`;
         totalSum += rollSum;
 
         if (command.repeat > 1) {
-          return rollIndex + 1 !== rolls.length ? rollMessage : rollMessage + `Total = ${totalSum}`;
+          return rollIndex + 1 !== rolls.length ? rollMessage : rollMessage + `**Total** = ${totalSum}`;
         }
         return rollMessage;
-      }, `rolled ${rollObj.commands[commandIndex]}\n`);
+      }, `rolled :game_die: ${rollObj.commands[commandIndex]}\n`);
     });
 
     rollObj.messages.forEach(messageStr => { giveNotificationBack(message, messageStr); });
