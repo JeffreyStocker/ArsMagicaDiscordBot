@@ -6,6 +6,7 @@ config/test.json
 
 #database
 users/*
+database/*
 
 # OS X
 .DS_Store
