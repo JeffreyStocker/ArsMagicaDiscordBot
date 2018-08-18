@@ -22,7 +22,9 @@
   "scripts": {
     "test": "mocha *-test.js ",
     "start": "node app.js",
-    "debug": "nodemon --inspect app.js"
+    "debug": "nodemon --inspect app.js",
+    "pmStart": "pm2 start --name 'ArsMagicaDiscordBot'",
+    "pmStop": "pm2 stop ArsMagicaDiscordBot"
   },
   "keywords": [
     "discord"
