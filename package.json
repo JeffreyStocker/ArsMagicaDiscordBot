@@ -23,7 +23,7 @@
     "test": "mocha *-test.js ",
     "start": "node app.js",
     "debug": "nodemon --inspect app.js",
-    "pmStart": "pm2 start --name 'ArsMagicaDiscordBot'",
+    "pmStart": "pm2 start 'npm start' --name 'ArsMagicaDiscordBot'",
     "pmStop": "pm2 stop ArsMagicaDiscordBot"
   },
   "keywords": [
