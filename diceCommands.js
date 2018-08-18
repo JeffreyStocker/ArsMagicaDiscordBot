@@ -47,6 +47,9 @@ const processRoll = function processRoll (content) {
     diceCount: Number(returnFirstValOrDefaultIfNull(content.match(/^\d+/) )),
     diceSize: handleDiceMod(content, (/(d\d+|ds|ds)/), 'd1' ),
     repeat: handleDiceMod(content, /(x[0-9]+)/),
+    explode: handleDiceMod(content, /(e[0-9]+)/),
+    stress: handleDiceMod(content, /(s[0-9]+)/),
+    botch: handleDiceMod(content, /(b[0-9]+)/),
   };
   if (output.diceSize === 0) {
     // [output.diceSize, output.diceCount, output.repeat] = [1, 1, output.diceCount + (output.repeat === 1 ? 0 : output.repeat)];
