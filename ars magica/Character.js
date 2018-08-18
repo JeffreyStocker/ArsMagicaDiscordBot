@@ -1,9 +1,11 @@
 
 module.exports = class Character {
-  constructor(name, user, { attributes = {}, arts = {}, id = undefined } = {}) {
+  constructor(name, user, { attributes = {}, arts = {} } = {}) {
+    if (!name || !user) {
+      throw new Error ('Must include a name and userId');
+    }
     this.name = name;
     this.user = user;
-    this._id = id;
     this.attribute = {
       str: 0,
       dex: 0,
