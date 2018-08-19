@@ -32,7 +32,7 @@ module.exports.rollBotch = function (numberOfDice) {
 
 
 module.exports.rollStress = function () {
-  var rollResults = [module.exports.roll(0, 9)];
+  var rollResults = [module.exports.rollDie(0, 9)];
   if (rollResults[0] === 0) { return 'botch'; }
   while (rollResults[rollResults.length - 1] === 1) {
     rollResults.push(module.exports.rollDie(1, 10));
