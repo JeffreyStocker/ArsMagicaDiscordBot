@@ -6,7 +6,7 @@ describe ('dice', function () {
   describe ('simple', function () {
     it('should output nothing but numbers between 1 and 10', function () {
       for (let i = 0; i < 500; i++) {
-        expect(dice.simple()).to.within(1, 10);
+        expect(dice.rollSimple()).to.within(1, 10);
       }
     });
   });
@@ -31,7 +31,7 @@ describe ('dice', function () {
     it ('should return a botch when rolled a zero', function () {
       var testResults = [];
       for (val of new Array(500)) {
-        testResults.push(dice.stress());
+        testResults.push(dice.rollStress());
       }
       expect(testResults).to.satisfy((val) => {
         if (val = 'botch') {
@@ -42,9 +42,9 @@ describe ('dice', function () {
               return true;
             }
             return false;
-          })
+          });
         }
-      })
+      });
     });
   });
 
@@ -58,8 +58,8 @@ describe ('dice', function () {
 
     it ('should add up value of dice that are over the miniumum', function () {
       var sum = dice.stressSum;
-      expect (sum([1,7])).to.equal(14);
-      expect (sum([1,9])).to.equal(18);
+      expect (sum([1, 7])).to.equal(14);
+      expect (sum([1, 9])).to.equal(18);
       expect (sum([1, 1, 1, 1, 2])).to.equal(32);
       expect (sum([1, 1, 5])).to.equal(20);
     });
@@ -67,7 +67,7 @@ describe ('dice', function () {
     it ('should add up exploding stress die that are less than 10 + 5*number of explosions', function () {
       var sum = dice.stressSum;
       expect (sum([1, 1, 1])).to.equal(15);
-      expect (sum([1,2])).to.equal(10);
+      expect (sum([1, 2])).to.equal(10);
       expect (sum([1, 1, 1, 2])).to.equal(20);
     });
 
