@@ -27,38 +27,21 @@ const findChar = function (charId) {
 };
 
 
-const setChar = function (userId, charData) {
-  var userData;
-  db.get(userId)
-    .catch(err => {
-      if (err.status === 404) {
-        charData.index = 0;
-        return db.put({
-          _id: userId,
-          characters: [charData]
-        });
-      }
-      console.log (err);
-    })
-    .then(userData => {
-      if (!charData.index) {
-        charData.index = userData.characters.length;
-        userData.characters.push(charData);
-      } else {
-        userData.characters[charData.index];
-      }
-      return db.put(userData);
-    })
+const setChar = function (charData) {
+};
+
+const remove = function (charId) {
+  return findChar(charId)
     .then(results => {
-      console.log (results);
-    })
-    .catch(err => {
-      console.log (err);
+      results._deleted = true;
+      return db.put(results);
     });
 };
 
 module.exports = {
   findChar,
-  setChar
+  setChar,
+  create,
+  remove
 
 };
