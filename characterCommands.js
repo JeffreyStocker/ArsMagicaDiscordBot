@@ -77,10 +77,8 @@ module.exports = {
       .then (user => {
         char = user.getChar(indexOrChar);
         if (!char) { throw new Error ('Invalid Character Selection'); }
-        return userDb.putUser(user);
-      })
-      .then (results => {
-        return characterDb.remove(char[1]);
+        user.removeCharByName(char[0]);
+        return Promise.all([userDb.putUser(user), characterDb.remove(char[1])]);
       })
       .then(results => {
         discordCommands.reply(message, char[0] + ' was deleted');
