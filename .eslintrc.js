@@ -10,10 +10,11 @@ module.exports = {
   },
   parserOptions: {
     // ecmaVersion: 6,
-    ecmaVersion: 2017,
+    ecmaVersion: 2018,
     sourceType: "module",
     ecmaFeatures: {
-      'jsx': true
+      'jsx': true,
+      // "ecmaFeatures.experimentalObjectRestSpread": true
     }
   },
   rules: {
@@ -42,6 +43,5 @@ module.exports = {
     /* Minuta */
     'comma-style': [2, 'last'],
     'quotes': [1, 'single'],
-    "experimentalObjectRestSpread": true
   }
 };
