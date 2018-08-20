@@ -21,11 +21,7 @@ module.exports = {
         if (err === null) {
           console.log ('user not found, now creating');
           var user = new User(message.author.name, message.author.id);
-          return new Promise ((resolve, revoke) => {
-            userDb.putUser(user)
-              .then (() => resolve(user) )
-              .catch (revoke);
-          });
+          return userDb.putUser(user);
         }
       })
       .then (user => {
@@ -47,7 +43,6 @@ module.exports = {
 
   create (message, content) {
     var charId;
-    message.channel.send('yep');
     let name = content;
     let author = message.author.id;
     if (!name) {
@@ -77,15 +72,10 @@ module.exports = {
 
   remove(message, indexOrChar) {
     var char;
-    var indexNum = Number(indexOrChar);
 
     userDb.getUser(message.author.id)
       .then (user => {
-        if (!isNaN(indexNum)) {
-          char = user.removeCharByIndex(indexNum - 1);
-        } else {
-          char = user.removeCharByName(indexOrChar);
-        }
+        char = user.getChar(indexOrChar);
         if (!char) { throw new Error ('Invalid Character Selection'); }
         return userDb.putUser(user);
       })
@@ -102,7 +92,22 @@ module.exports = {
   },
 
   select (message, indexOrChar) {
-
+    var char;
+    userDb.getUser(message.author.id).then (user=> {
+      char = user.setCurrentChar(indexOrChar);
+      if (char === null) {
+        discordCommands.giveNotificationBack(message, ' Invalid Selection');
+        return Promise.reject('break');
+      }
+      return userDb.putUser(user);
+    })
+      .then (results => {
+        discordCommands.giveNotificationBack(message, 'You have selected: ' + char[0]);
+      })
+      .catch (err => {
+        if (err === 'break') { return; }
+        console.log (err);
+      });
   }
 
 };
