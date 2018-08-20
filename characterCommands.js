@@ -31,7 +31,7 @@ module.exports = {
           discordCommands.reply(message, 'You do not have any characters');
         } else {
           for (let [index, char] of Object.entries(characters)) {
-            reply += Number(index + 1) + `: ${char}`;
+            reply += Number(Number(index) + 1) + `: ${char}\n`;
           }
           discordCommands.reply(message, reply);
         }
@@ -61,10 +61,10 @@ module.exports = {
           return userDb.putUser(user);
         })
         .then (result => {
-          discordCommands.reply(message, `Character: ${char.name} was created`);
+          discordCommands.reply(message, `New Character: ${char.name} was created`);
         })
         .catch (err => {
-          discordCommands.reply(message, `Character: ${char.name} failed to create`);
+          discordCommands.reply(message, `${char.name} failed to create`);
           console.error(err);
         });
     }
