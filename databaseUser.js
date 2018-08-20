@@ -38,7 +38,11 @@ const putUser = function (user) {
       if (err.status === 409) {
         return handleCollision(user);
       }
-    }).then (resolve)
+    }).then (results => {
+      user._id = results.id;
+      user._rev = results.rev;
+      resolve(user);
+    })
       .catch (err => {
         revoke(err);
       });
