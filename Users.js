@@ -87,11 +87,12 @@ const Users = class Users {
   }
 
 
-  getChar (nameOrIndex) {
-    if (isNaN(nameOrIndex)) {
+  getChar (nameOrIndex, offsetIndex = true) {
+    var index = Number(nameOrIndex);
+    if (isNaN(index)) {
       return this.getCharByName(nameOrIndex);
     }
-    return this.getCharByIndex(nameOrIndex);
+    return this.getCharByIndex(offsetIndex ? index - 1 : index);
   }
 
 
@@ -113,6 +114,13 @@ const Users = class Users {
 
   getCurrentChar() {
     return this.currentChar;
+  }
+
+  isDuplicateCharName (charName) {
+    var result = this.searchCharByName((char, index, name) => {
+      return name === charName ? true : false;
+    });
+    return result ? true : false;
   }
 
 };
