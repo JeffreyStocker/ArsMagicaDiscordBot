@@ -108,6 +108,25 @@ module.exports = {
         if (err === 'break') { return; }
         console.log (err);
       });
+  },
+
+  selected (message) {
+    userDb.getUser(message.author.id).then (user=> {
+      var selected = user.getCurrentChar();
+      if (selected === null) {
+        discordCommands.giveNotificationBack(message, ' No Character Selected');
+        return Promise.reject('break');
+      }
+      discordCommands.giveNotificationBack(message, ' You have ' + selected[0] + ' selected');
+    })
+      .catch (err => {
+        if (err === 'break') { return; }
+        console.log (err);
+      });
+  },
+
+  set(message, attribuesStr) {
+
   }
 
 };

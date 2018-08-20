@@ -111,6 +111,10 @@ const Users = class Users {
     return char;
   }
 
+  getCurrentChar() {
+    return this.currentChar;
+  }
+
 };
 
 module.exports = Users;
