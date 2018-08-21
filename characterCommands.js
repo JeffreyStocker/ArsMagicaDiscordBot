@@ -124,7 +124,75 @@ module.exports = {
   },
 
   set(message, attribuesStr) {
+    var parsedAttributes = attribuesStr.split(' ');
+    getCurrentChar(message.author.id)
+      .then ((currentChar) => {
+        return characterDb.findChar(currentChar[1]);
+      })
+      .then(char => {
+        var success = [];
+        var fail = [];
+        for (let valIndex = 1, statNameIndex = 0; statNameIndex < parsedAttributes.length; val++, statNameIndex++) {
+          var [stat, val] = [parsedAttributes[statNameIndex], parsedAttributes[valIndex]];
+          var setResult = char.set(stat, val);
+          setResults === null ? fail.push(stat) : success.push(stat);
+        }
+        // return characterDb.setChar(char);
+      })
+      .then (results => {
+        discordCommands.giveNotificationBack(message, selected[0] + ' has been updated sucessfully');
+      })
+      .catch (err => {
+        if (err === null) {
+          return discordCommands.giveNotificationBack(message, ' No Character Selected');
+        }
+        console.log (err);
+      });
 
+  },
+
+  stats(message) {
+    getCurrentChar(message.author.id)
+      .then (currentChar => {
+        return characterDb.findChar(currentChar[1]);
+      })
+      .then(char => {
+        var statOutput, techOutputs, formOutputs, attribOutputs;
+        techOutputs = reduceToKeyValStringWithComma(char.techniques);
+        formOutputs = reduceToKeyValStringWithComma(char.forms);
+        attribOutputs = reduceToKeyValStringWithComma(char.attributes);
+        statOutput = `: ${char.name} statistics are:
+        Techniques: ${techOutputs}
+        Forms: ${formOutputs}
+        Attributes: ${attribOutputs}`;
+
+        discordCommands.giveNotificationBack(message, statOutput);
+      })
+      .catch (err => {
+        if (err === null) {
+          return discordCommands.giveNotificationBack(message, ' No Character Selected');
+        }
+        console.log (err);
+      });
   }
 
+};
+
+const getCurrentChar = function getCurrentChar (id) {
+  return new Promise ((resolve, revoke) => {
+    userDb.getUser(id).then (user=> {
+      resolve(user.getCurrentChar());
+    })
+      .catch (err => {
+        if (err.status === 404) { return revoke(null); }
+        revoke(err);
+      });
+  });
+};
+
+
+const reduceToKeyValStringWithComma = function (targetObject, seperator = ', ') {
+  return Object.entries(targetObject).reduce((msgStr, [key, val]) => {
+    return msgStr + `${key}: ${val}${seperator}`;
+  }, '');
 };
