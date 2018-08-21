@@ -78,6 +78,9 @@ module.exports = {
         char = user.getChar(indexOrChar);
         if (!char) { throw new Error ('Invalid Character Selection'); }
         user.removeCharByName(char[0]);
+        if (char[1] === user.currentChar[1]) {
+          user.currentChar = null;
+        }
         return Promise.all([userDb.putUser(user), characterDb.remove(char[1])]);
       })
       .then(results => {
