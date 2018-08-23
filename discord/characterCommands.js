@@ -1,5 +1,5 @@
 const path = require ('path');
-const pouch = require(path.join(__dirname + '/../database/pouch.js'));
+// const pouch = require(path.join(__dirname + '/../database/pouch.js'));
 const Character = require(path.join(__dirname + '/../ars magica/Character'));
 const characterDb = require (path.join(__dirname + '/../database/databaseCharacter'));
 const userDb = require (path.join(__dirname + '/../database/databaseUser'));
@@ -32,7 +32,7 @@ module.exports = {
           discordCommands.reply(message, 'You do not have any characters');
         } else {
           for (let [index, char] of Object.entries(characters)) {
-            reply += Number(Number(index) + 1) + `: ${char}\n`;
+            reply += Number(Number(index) + 1) + `: **${char}**\n`;
           }
           discordCommands.reply(message, reply);
         }
@@ -62,7 +62,7 @@ module.exports = {
           return userDb.putUser(user);
         })
         .then (result => {
-          discordCommands.reply(message, `New Character: ${char.name} was created`);
+          discordCommands.reply(message, `New Character: **${char.name}** was created`);
         })
         .catch (err => {
           discordCommands.reply(message, `${char.name} failed to create`);
@@ -104,7 +104,7 @@ module.exports = {
       return userDb.putUser(user);
     })
       .then (results => {
-        discordCommands.giveNotificationBack(message, 'You have selected: ' + char[0]);
+        discordCommands.giveNotificationBack(message, `You have selected: **${char[0]}**`);
       })
       .catch (err => {
         if (err === 'break') { return; }
@@ -119,7 +119,7 @@ module.exports = {
         discordCommands.giveNotificationBack(message, ' No Character Selected');
         return Promise.reject('break');
       }
-      discordCommands.giveNotificationBack(message, ' You have ' + selected[0] + ' selected');
+      discordCommands.giveNotificationBack(message, `You have **${selected[0]}** selected`);
     })
       .catch (err => {
         if (err === 'break') { return; }
@@ -171,7 +171,7 @@ module.exports = {
         techOutputs = reduceToKeyValStringWithComma(char.techniques);
         formOutputs = reduceToKeyValStringWithComma(char.forms);
         attribOutputs = reduceToKeyValStringWithComma(char.attributes);
-        statOutput = `: ${char.name} statistics are:
+        statOutput = `: **${char.name}'s** statistics are:
         Techniques: ${techOutputs}
         Forms: ${formOutputs}
         Attributes: ${attribOutputs}`;
