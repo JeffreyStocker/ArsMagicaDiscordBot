@@ -15,23 +15,31 @@ const create = function (char) {
   });
 };
 
-
-const restoreCharacterFromDB = function (characterData) {
-  characterData.__proto__ = Character.prototype;
-  return characterData;
-};
-
-
-const findChar = function (charId) {
-  return db.get(charId);
+const getChar = function (charId) {
+  return db.get(charId)
+    .then (charData => {
+      return Promise.resolve (Character.import(charData));
+    })
+    .catch ( err => {
+      Promise.revoke(null);
+      console.log (err);
+    });
 };
 
 
 const setChar = function (charData) {
+  return db.put(charData)
+    .then (result => {
+      return Promise.resolve();
+    })
+    .catch ( err => {
+      Promise.revoke(null);
+      console.log (err);
+    });
 };
 
 const remove = function (charId) {
-  return findChar(charId)
+  return getChar(charId)
     .then(results => {
       results._deleted = true;
       return db.put(results);
@@ -39,7 +47,7 @@ const remove = function (charId) {
 };
 
 module.exports = {
-  findChar,
+  getChar,
   setChar,
   create,
   remove
