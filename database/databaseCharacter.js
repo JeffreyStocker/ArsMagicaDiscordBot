@@ -4,7 +4,7 @@ const db = {db() { return Promise.resolve(); } };
 const Character = require(path.join(__dirname + '/../ars magica/Character'));
 PouchDB.plugin(require('pouchdb-find'));
 
-const defaultLocation = path.join(__dirname + '/charaters');
+const defaultLocation = path.join(__dirname + '/characters');
 const init = function (characterDatabaseLocation = defaultLocation) {
   db.db = new PouchDB (characterDatabaseLocation);
 };
@@ -26,7 +26,7 @@ const getChar = function (charId) {
       return Promise.resolve (Character.import(charData));
     })
     .catch ( err => {
-      Promise.revoke(null);
+      Promise.reject(null);
       console.log (err);
     });
 };
