@@ -127,23 +127,26 @@ module.exports = {
   },
 
   set(message, attribuesStr) {
+    var character;
+    var success = [];
+    var fail = [];
     var parsedAttributes = attribuesStr.split(' ');
     getCurrentChar(message.author.id)
       .then ((currentChar) => {
-        return characterDb.findChar(currentChar[1]);
+        return characterDb.getChar(currentChar[1]);
       })
       .then(char => {
-        var success = [];
-        var fail = [];
-        for (let valIndex = 1, statNameIndex = 0; statNameIndex < parsedAttributes.length; val++, statNameIndex++) {
-          var [stat, val] = [parsedAttributes[statNameIndex], parsedAttributes[valIndex]];
-          var setResult = char.set(stat, val);
-          setResults === null ? fail.push(stat) : success.push(stat);
+
+        character = char;
+        for (let valIndex = 1, statNameIndex = 0; statNameIndex < parsedAttributes.length; valIndex += 2, statNameIndex += 2) {
+          let [stat, val] = [parsedAttributes[statNameIndex], parsedAttributes[valIndex]];
+          let setResult = char.set(stat, val);
+          setResult === null ? fail.push(stat) : success.push(stat);
         }
-        // return characterDb.setChar(char);
+        return characterDb.setChar(char);
       })
       .then (results => {
-        discordCommands.giveNotificationBack(message, selected[0] + ' has been updated sucessfully');
+        discordCommands.giveNotificationBack(message, character.name + ` has been updated sucessfully\nSuccess: ${success}\nFailed: ${fail}`);
       })
       .catch (err => {
         if (err === null) {
@@ -157,7 +160,10 @@ module.exports = {
   stats(message) {
     getCurrentChar(message.author.id)
       .then (currentChar => {
-        return characterDb.findChar(currentChar[1]);
+        if (currentChar === null) {
+          return Promise.reject('No Character');
+        }
+        return characterDb.getChar(currentChar[1]);
       })
       .then(char => {
         var statOutput, techOutputs, formOutputs, attribOutputs;
@@ -172,7 +178,7 @@ module.exports = {
         discordCommands.giveNotificationBack(message, statOutput);
       })
       .catch (err => {
-        if (err === null) {
+        if (err === 'No Character' || err === null) {
           return discordCommands.giveNotificationBack(message, ' No Character Selected');
         }
         console.log (err);
@@ -198,4 +204,10 @@ const reduceToKeyValStringWithComma = function (targetObject, seperator = ', ') 
   return Object.entries(targetObject).reduce((msgStr, [key, val]) => {
     return msgStr + `${key}: ${val}${seperator}`;
   }, '');
+};
+
+const removeAllNonWordFromString = function (str) {
+  var reg = /[^\w\s]/g;
+  if (typeof str !== 'string') { throw new Error ('A string must be used'); }
+  return str.replace (reg, '');
 };
