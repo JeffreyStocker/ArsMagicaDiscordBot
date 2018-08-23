@@ -21,7 +21,7 @@ var removeEmptyArraySpots = function (array) {
 var processContent = function (message) {
   var msg = message.content.trim();
   var [com, ...content] = msg.split(' ');
-  return [com, content.join('')];
+  return [com, content.join(' ')];
 };
 
 client.on('message', (message) => {
