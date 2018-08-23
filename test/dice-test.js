@@ -72,4 +72,12 @@ describe ('dice', function () {
     });
 
   });
+
+  describe ('rollDie', function ( ) {
+    it('should return a value between 1 and 10', function () {
+      for (var i of Array(100)) {
+        expect(dice.rollDie(1, 10)).to.be.within(1, 10);
+      }
+    });
+  });
 });
