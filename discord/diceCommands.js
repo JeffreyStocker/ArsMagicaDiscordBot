@@ -1,6 +1,7 @@
 const inspect = require('util').inspect;
-const { rollStress, rollBotch, rollDie, rollDice, rollSimple, sum, stressSum } = require('./dice.js');
-const discordCommands = require ('./dicordCommands');
+const path = require ('path');
+const { rollStress, rollBotch, rollDie, rollDice, rollSimple, sum, stressSum } = require(path.join(__dirname + '/../dice/dice.js'));
+const discordCommands = require (path.join(__dirname + '/../discord/discordCommands'));
 const { giveNotificationBack, rolledMessage } = discordCommands;
 
 

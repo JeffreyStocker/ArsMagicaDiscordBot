@@ -1,9 +1,10 @@
-const pouch = require('./pouch.js');
-const Character = require('./ars magica/Character');
-const characterDb = require ('./databaseCharacter');
-const userDb = require ('./databaseUser');
-const discordCommands = require ('./dicordCommands');
-const User = require('./Users');
+const path = require ('path');
+const pouch = require(path.join(__dirname + '/../database/pouch.js'));
+const Character = require(path.join(__dirname + '/../ars magica/Character'));
+const characterDb = require (path.join(__dirname + '/../database/databaseCharacter'));
+const userDb = require (path.join(__dirname + '/../database/databaseUser'));
+const discordCommands = require (path.join(__dirname + '/discordCommands'));
+const User = require(path.join(__dirname + '/../Users'));
 
 module.exports = {
   list (message, content) {
