@@ -1,12 +1,17 @@
-var PouchDB = require('pouchdb');
-var db = new PouchDB('./database/characters');
-var Character = require('./ars magica/Character');
-
+const PouchDB = require('pouchdb');
+const path = require('path');
+const db = {db() { return Promise.resolve(); } };
+const Character = require(path.join(__dirname + '/../ars magica/Character'));
 PouchDB.plugin(require('pouchdb-find'));
+
+const defaultLocation = path.join(__dirname + '/charaters');
+const init = function (characterDatabaseLocation = defaultLocation) {
+  db.db = new PouchDB (characterDatabaseLocation);
+};
 
 const create = function (char) {
   return new Promise ((resolve, revoke) => {
-    db.post(char).then (result => {
+    db.db.post(char).then (result => {
       resolve (result.id);
     })
       .catch (err => {
@@ -16,7 +21,7 @@ const create = function (char) {
 };
 
 const getChar = function (charId) {
-  return db.get(charId)
+  return db.db.get(charId)
     .then (charData => {
       return Promise.resolve (Character.import(charData));
     })
@@ -28,7 +33,7 @@ const getChar = function (charId) {
 
 
 const setChar = function (charData) {
-  return db.put(charData)
+  return db.db.put(charData)
     .then (result => {
       return Promise.resolve();
     })
@@ -42,7 +47,7 @@ const remove = function (charId) {
   return getChar(charId)
     .then(results => {
       results._deleted = true;
-      return db.put(results);
+      return db.db.put(results);
     });
 };
 
@@ -50,6 +55,6 @@ module.exports = {
   getChar,
   setChar,
   create,
-  remove
-
+  remove,
+  init
 };

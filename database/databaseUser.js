@@ -1,14 +1,20 @@
-var PouchDB = require('pouchdb');
-var db = new PouchDB('./database/users');
-var moment = require('moment');
-const User = require ('./Users');
+const PouchDB = require('pouchdb');
+const path = require ('path');
+const db = {db() { return Promise.resolve(); } };
+// const moment = require('moment');
+const User = require (path.join (__dirname + '/../Users'));
 
 PouchDB.plugin(require('pouchdb-find'));
+
+const defaultLocation = path.join(__dirname + '/users');
+const init = function (characterDatabaseLocation = defaultLocation) {
+  db.db = new PouchDB (characterDatabaseLocation);
+};
 
 const postUser = function (name, id) {
   var user = new User (name, id);
   return new Promise ((resolve, revoke) => {
-    db.put(user)
+    db.db.put(user)
       .then ((info) => {
         user._rev = info.rev;
         resolve(user);
@@ -19,7 +25,7 @@ const postUser = function (name, id) {
 
 const getUser = function (id) {
   return new Promise ((resolve, revoke) => {
-    db.get(id)
+    db.db.get(id)
       .then (user => {
         resolve(User.import(user));
       })
@@ -34,7 +40,7 @@ const getUser = function (id) {
 
 const putUser = function (user) {
   return new Promise ((resolve, revoke) => {
-    db.put(user).catch(err => {
+    db.db.put(user).catch(err => {
       if (err.status === 409) {
         return handleCollision(user);
       }
@@ -52,15 +58,16 @@ const putUser = function (user) {
 
 module.exports = {
   getUser,
+  init,
   putUser,
 };
 
 
 const handleCollision = function (doc) {
   return new Promise ((resolve, revoke) => {
-    db.get(doc._id).then(returnedDoc => {
+    db.db.get(doc._id).then(returnedDoc => {
       doc._rev = returnedDoc._rev;
-      return db.put(doc);
+      return db.db.put(doc);
     }).then (resolve)
       .catch(revoke);
   });
