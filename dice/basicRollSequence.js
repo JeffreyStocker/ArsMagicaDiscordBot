@@ -1,6 +1,4 @@
-
-
-const processCommandsFunc =  (req, res, processFunc = processRoll) => {
+const processCommandsFunc = (req, res, processFunc = processRoll) => {
   if (!processFunc) {
     processFunc = processRoll;
   } else if (typeof processFunc !== 'function') {
@@ -46,7 +44,7 @@ const processSums = (req, res, mapFunc ) => {
 };
 
 
-const adjustProcessedCommands =  (req, res, mapFunc) => {
+const adjustProcessedCommands = (req, res, mapFunc) => {
   if (!mapFunc) {
     mapFunc = (val) => val;
   } else if (typeof mapFunc !== 'function') {
