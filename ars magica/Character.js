@@ -53,7 +53,7 @@ var attributes = {
   str: 0,
   dex: 0,
   com: 0,
-  pre: 0,
+  per: 0,
   int: 0,
   qui: 0,
   sta: 0,
@@ -132,18 +132,32 @@ const Character = class Character {
     return charData;
   }
 
-  load (data) {
-    for (let [key, val] of data.entries()) {
-      this[key] = val;
-    }
-  }
+  returnFormTechBonus (formAndTech) {
+    var techBonus = Object.entries(this.techniques).reduce((techBonus, [name, val]) => {
+      var regexp = new RegExp(`${name}`, 'gi');
+      var found = formAndTech.match(regexp);
+      if (found && (techBonus > val || techBonus === null)) {
+        return val;
+      } else {
+        return techBonus;
+      }
+    }, null);
 
-  save () {
-    var output = {};
-    for (let [key, val] of this.entries() ) {
-      output[key] = val;
-    }
-    return output;
+
+    var formBonus = Object.entries(this.forms).reduce((formBonus, [name, val]) => {
+      var regexp = new RegExp(`${name}`, 'gi');
+      var found = formAndTech.match(regexp);
+      if (found && (formBonus > val || formBonus === null)) {
+        return val;
+      } else {
+        return formBonus;
+      }
+    }, null);
+
+    techBonus = techBonus === null ? 0 : techBonus;
+    formBonus = formBonus === null ? 0 : formBonus;
+
+    return techBonus + formBonus;
   }
 };
 
