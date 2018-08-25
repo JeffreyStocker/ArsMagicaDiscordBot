@@ -3,7 +3,7 @@ const path = require ('path');
 const { rollStress, rollBotch, rollDie, rollDice, rollSimple, sum, stressSum } = require(path.join(__dirname + '/../dice/dice.js'));
 const discordCommands = require (path.join(__dirname + '/../discord/discordCommands'));
 const { giveNotificationBack, rolledMessage } = discordCommands;
-
+const basicRollSequence = require (path.join(__dirname, '/../dice/basicRollSequence.js'));
 
 const spreadArray = function (array) {
   return ('[' + array + ']');
@@ -154,22 +154,22 @@ module.exports = {
   },
 
 
-  stressBackup(message, content) {
-    var count, modifier;
-    var processed = processStressContent(content);
+  // stressBackup(message, content) {
+  //   var count, modifier;
+  //   var processed = processStressContent(content);
 
-    count = Number(processed[0]);
-    modifier = calcModifier(processed.slice(1));
+  //   count = Number(processed[0]);
+  //   modifier = calcModifier(processed.slice(1));
 
-    console.log ('mod', modifier);
-    let outGoingMessage = '';
+  //   console.log ('mod', modifier);
+  //   let outGoingMessage = '';
 
-    for (let i = 0; i < count; i++) {
-      outGoingMessage += i + 1 + '. ' + stressMessage(rollStress(), modifier) + '\n';
-    }
-    console.log (outGoingMessage);
-    rolledMessage(message, outGoingMessage);
-  },
+  //   for (let i = 0; i < count; i++) {
+  //     outGoingMessage += i + 1 + '. ' + stressMessage(rollStress(), modifier) + '\n';
+  //   }
+  //   console.log (outGoingMessage);
+  //   rolledMessage(message, outGoingMessage);
+  // },
 
   stress(message, content) {
     var rollObj = {
@@ -254,23 +254,23 @@ module.exports = {
     giveNotificationBack(message, 'pong!');
   },
 
-  rollBackup (message, content) {
-    var rolls = [];
-    var rollObj = processRoll(content);
-    let x = 0;
-    var output = '';
+  // rollBackup (message, content) {
+  //   var rolls = [];
+  //   var rollObj = processRoll(content);
+  //   let x = 0;
+  //   var output = '';
 
-    while (x < rollObj.diceCount) {
-      x++;
-      rolls.push(rollDie(1, rollObj.diceSize));
-    }
-    let rollResult = rolls.reduce ((sum, val) => (sum + val), 0);
+  //   while (x < rollObj.diceCount) {
+  //     x++;
+  //     rolls.push(rollDie(1, rollObj.diceSize));
+  //   }
+  //   let rollResult = rolls.reduce ((sum, val) => (sum + val), 0);
 
-    let sum = rollResult + rollObj.modifier;
-    output += `[${rolls}]${printMod(rollObj.modifier)} = ${sum}\n`;
-    console.log (rollObj);
-    rolledMessage(message, output);
-  },
+  //   let sum = rollResult + rollObj.modifier;
+  //   output += `[${rolls}]${printMod(rollObj.modifier)} = ${sum}\n`;
+  //   console.log (rollObj);
+  //   rolledMessage(message, output);
+  // },
 
   roll (message, content) {
     var rollObj = {
@@ -319,7 +319,11 @@ module.exports = {
 
 
     console.log(inspect(rollObj, { depth: 4 }));
+    basicRollSequence(message, content);
+
   }
+
+
 
 };
 
