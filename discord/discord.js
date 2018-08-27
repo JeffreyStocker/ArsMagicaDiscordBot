@@ -44,7 +44,11 @@ client.login(process.env.DISCORD_TOKEN)
     console.log ('Logged On');
   })
   .catch(err => {
-    console.log ('Error: ', err);
+    if (err.code === 'ENOTFOUND') {
+      console.log ('Discord - No connection');
+    } else {
+      console.log ('Error: ', err);
+    }
   });
 
 client.on('error', function (err) {
