@@ -84,13 +84,13 @@ const Character = class Character {
     return { ...this.forms, ...this.techniques};
   }
 
-  setAttribute(name, val) {
-    if (this.attributes[name]) {
-      this.attributes[name] = val;
-      return true;
-    }
-    return false;
-  }
+  // setAttribute(name, val) {
+  //   if (this.attributes[name]) {
+  //     this.attributes[name] = val;
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   setAllAttributes (data) {
     for (let attribute of Object.keys(data)) {
@@ -98,19 +98,19 @@ const Character = class Character {
     }
   }
 
-  setArt(name, val) {
-    if (this.arts[name]) {
-      this.arts[name] = val;
-      return true;
-    }
-    return false;
-  }
+  // setArt(name, val) {
+  //   if (this.arts[name]) {
+  //     this.arts[name] = val;
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
-  setArts (data) {
-    for (let art of Object.keys(data)) {
-      this.setArts(art, data[art]);
-    }
-  }
+  // setArts (data) {
+  //   for (let art of Object.keys(data)) {
+  //     this.setArts(art, data[art]);
+  //   }
+  // }
 
   set(stat, val) {
     val = Number (val);
