@@ -6,20 +6,20 @@ All commands are need a commands symbol and then preceeded by the command. The d
 example:
 >!roll 5d6
 
-###Dice Commands
-##roll
+### Dice Commands
+## roll
 
-##stress
+## stress
 
-##simple
+## simple
 
-##botch
+## botch
 
-###Character commands
-##create
+### Character commands
+## create
 
-##stats
+## stats
 
-##select
+## select
 
-##selected
+## selected
