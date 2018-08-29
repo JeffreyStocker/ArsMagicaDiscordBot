@@ -1,25 +1,25 @@
 # ArsMagicaDiscordBot
 Ars Magica Discord Bot that returns a dice roll
 
-#### Commands
+## Commands
 All commands are need a commands symbol and then preceeded by the command. The default is #;
 example:
 >!roll 5d6
 
 ### Dice Commands
-## roll
+#### roll
 
-## stress
+#### stress
 
-## simple
+#### simple
 
-## botch
+#### botch
 
 ### Character commands
-## create
+#### create
 
-## stats
+#### stats
 
-## select
+#### select
 
-## selected
+#### selected
