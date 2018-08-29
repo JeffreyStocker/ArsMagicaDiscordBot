@@ -10,23 +10,40 @@ example:
 
 ### Dice Commands
 #### roll
+[count]d[size]
+rolls a number of dice of a selected size. Other commands may be added on after the count and size. Multiple rolls can be seperated by ','
 
+Currently supports:
+>x: repeats the roll multple times
+
+>+: adds value to the total
+
+>-: removes value from the total
+<!--
+>e: explosion: rerolls a dice and adds
+>stress:
+>botch
+ -->
 ```
-#roll 5
+#roll 5d20x2
+//will return
+
 ```
 
 #### stress
-
+rolls a number of d10 dice that will explode on a 1 and requests you roll for botch on a 0
 ```
 #stress 5
 ```
 
 #### simple
+rolls a number of d10 dice
 ```
 #simple 5
 ```
 
 #### botch
+roll a number of botch dice. A botch die will botch if any roll zero.
 ```
 #botch 5
 ```
@@ -48,6 +65,7 @@ Creates a new character with a name. The name is case sensitive.
 ```
 
 #### select
+when selecting a character, you can use either the character's name or their list number shown when using the list command. Names are case sensitive
 ```
 #select George
 //or
@@ -55,6 +73,7 @@ Creates a new character with a name. The name is case sensitive.
 ```
 
 #### selected
+selected will return the character you currently have selected
 ```
 #selected
 //will return
