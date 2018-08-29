@@ -4,47 +4,63 @@ Ars Magica Discord Bot that returns a dice roll
 ## Commands
 All commands are need a commands symbol and then preceeded by the command. The default is #;
 example:
->!roll 5d6
+```
+!roll 5d6
+```
 
 ### Dice Commands
 #### roll
 
->!roll 5
+```
+!roll 5
+```
 
 #### stress
 
->!stress 5
+```
+!stress 5
+```
 
 #### simple
->!simple 5
-
+```
+!simple 5
+```
 #### botch
->!botch 5
-
+```
+!botch 5
+```
 ### Character commands
 #### create
 Creates a new character with a name. The name is case sensitive.
->!create George
-
+```
+!create George
+```
 #### stats
 stats displays your charater current statistics, such as attributes, forms and techniques.
-
+```
+```
 #### list
->!list
+```
+!list
+```
 will return
->1. George
->2. Sam
->3. Bob
-
+```
+1. George
+2. Sam
+3. Bob
+```
 #### select
-
->!select George
->or
->!select 1
-
+```
+!select George
+//or
+!select 1
+```
 
 #### selected
-
->!selected
+```
+!selected
+```
 will return
->You have **George** selected
+```
+You have George selected
+```
