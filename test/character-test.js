@@ -58,8 +58,10 @@ describe ('Character Class', function () {
 
   describe ('import', function ( ) {
     it('should set __proto__ of the imported object to the Character prototyple', function () {
-      var char = Character.import({});
-      expect(char.__proto__).to.equal (Character.prototype);
+      var prevChar = new Character ('goerge', 34342383);
+      var parsedChar = JSON.parse(JSON.stringify(prevChar));
+      var char = Character.import(parsedChar);
+      // expect(char.__proto__).to.equal (Character.prototype);
       expect(typeof Character.import).to.equal ('function');
       expect(typeof char.set).to.equal ('function');
     });
@@ -85,6 +87,12 @@ describe ('Character Class', function () {
     });
 
     it ('should ', function () {
+
+    });
+  });
+
+  describe ('setAll', function ( ) {
+    it('should ', function () {
 
     });
   });

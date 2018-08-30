@@ -76,8 +76,8 @@ const Character = class Character {
     this.forms = { ... forms };
     this.techniques = { ...techniques };
 
-    attributes && this.setAllAttributes(attributes);
-    arts && this.setAllAttributes(arts);
+    attributes && this.setAll(attributes);
+    arts && this.setAll(arts);
   }
 
   get arts() {
@@ -92,11 +92,11 @@ const Character = class Character {
   //   return false;
   // }
 
-  setAllAttributes (data) {
-    for (let attribute of Object.keys(data)) {
-      this.setAttribute(attribute, data[attribute]);
-    }
-  }
+  // setAllAttributes (data) {
+  //   for (let [name, val] of Object.entries(data)) {
+  //     this.set(name, val);
+  //   }
+  // }
 
   // setArt(name, val) {
   //   if (this.arts[name]) {
@@ -127,9 +127,30 @@ const Character = class Character {
     return true;
   }
 
+  setAll (values) {
+    var failure = [];
+    var success = [];
+    var iterables;
+    if (Array.isArray(values)) {
+      iterables = values;
+    } else if (typeof values === 'object') {
+      iterables = Object.entries(values);
+    } else {
+      throw new Error('Inputed Values must be an array or object');
+    }
+    for (var [name, value] of iterables) {
+      let status = this.set (name, value);
+      status ? success.push(name) : failure.push(name);
+    }
+    return {success, failure};
+  }
+
+
   static import (charData) {
-    charData.__proto__ = Character.prototype;
-    return charData;
+    // charData.__proto__ = Character.prototype;
+    // return charData;
+
+    return Object.assign(new Character(charData.name, charData.user), charData);
   }
 
   returnFormTechBonus (formAndTech) {
