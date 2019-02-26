@@ -1,6 +1,13 @@
 # ArsMagicaDiscordBot
 Ars Magica Discord Bot that returns a dice roll
 
+## Install
+1. Install node.js
+2. clone repository, either by downloading it, or using git clone
+3. from inside directory where the program is, run command "npm install" and wait until complete
+4. add your discord token to .env. There is an example in .env-template
+5. then run command "npm start"
+
 ## Commands
 All commands are need a commands symbol and then preceeded by the command. The default is #;
 example:
@@ -49,6 +56,7 @@ roll a number of botch dice. A botch die will botch if any roll zero.
 ```
 
 ### Character commands
+note character commands are buggy right now
 #### create
 Creates a new character with a name. The name is case sensitive.
 ```
